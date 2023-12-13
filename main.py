@@ -9,6 +9,7 @@ from config import BOT_TOKEN, ADMIN_ID
 from core.filters.iscontact import IsTrueContact
 from core.handlers.basic import get_start
 from core.handlers.contact import get_fake_contact, get_true_contact
+from core.middlewares.ignoretextmiddleware import IgnoreOthersMiddleware
 
 
 async def start_bot(bot: Bot):
@@ -26,6 +27,7 @@ async def start():
     bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
 
     dp = Dispatcher()
+    dp.update.outer_middleware(IgnoreOthersMiddleware())
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 
@@ -34,6 +36,7 @@ async def start():
     dp.message.register(get_fake_contact, F.content_type.CONTACT)
 
     try:
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
     finally:
         await bot.session.close()
