@@ -7,7 +7,7 @@ from aiogram.filters import Command
 
 from config import BOT_TOKEN, ADMIN_ID
 from core.filters.iscontact import IsTrueContact
-from core.handlers.basic import get_start, get_photo, get_hello
+from core.handlers.basic import get_start
 from core.handlers.contact import get_fake_contact, get_true_contact
 
 
@@ -29,9 +29,7 @@ async def start():
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 
-    dp.message.register(get_start, Command(commands=["start", "run", "restart"]))
-    dp.message.register(get_photo, F.photo)
-    dp.message.register(get_hello, F.text == "Привет")
+    dp.message.register(get_start, Command(commands=["start"]))
     dp.message.register(get_true_contact, F.content_type.CONTACT, IsTrueContact())
     dp.message.register(get_fake_contact, F.content_type.CONTACT)
 
