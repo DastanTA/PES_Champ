@@ -11,6 +11,8 @@ class IgnoreOthersMiddleware(BaseMiddleware):
             event: TelegramObject,
             data: Dict[str, Any]
     ) -> Any:
-        if event in (CallbackQuery, Message, BotCommand):
+        if isinstance(event, (CallbackQuery, Message, BotCommand)):
+            print("Catched")
             return await handler(event, data)
+        print(f"Didn't catch\n{event}")
         return
