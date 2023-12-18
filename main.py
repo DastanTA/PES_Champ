@@ -43,7 +43,7 @@ async def start():
     dp.message.register(get_fake_contact, F.content_type.CONTACT)
 
     try:
-        await bot.delete_webhook(drop_pending_updates=True)
+        # await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
     finally:
         await bot.session.close()
