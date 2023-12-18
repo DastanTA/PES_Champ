@@ -5,8 +5,8 @@ class Request:
     def __init__(self, connector: asyncpg.pool.Pool):
         self.connector = connector
 
-    async def add_user(self, user_id, first_name):
-        query = f"INSERT INTO users (first_name, user_id) VALUES ('{first_name}', {user_id}) ON CONFLICT (user_id) DO UPDATE SET first_name='{first_name}'"
+    async def add_user(self, user_id, first_name, group_chat_id):
+        query = f"INSERT INTO users (first_name, user_id, group_chat_id) VALUES ('{first_name}', {user_id}, {group_chat_id}) ON CONFLICT (user_id) DO UPDATE SET first_name='{first_name}'"
         await self.connector.execute(query)
 
     async def check_user(self, user_id):

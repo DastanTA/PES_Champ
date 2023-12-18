@@ -10,10 +10,13 @@ from config import BOT_TOKEN, ADMIN_ID, PGPORT, PGUSER, PGPASSWORD, HOST, DATABA
 from core.filters.iscontact import IsTrueContact
 from core.handlers.basic import get_start
 from core.handlers.contact import get_fake_contact, get_true_contact
+from core.handlers.callback import register_new_player, done_registering_players
 from core.middlewares.dbmiddleware import DbSession
+from core.utils.commands import set_commands
 
 
 async def start_bot(bot: Bot):
+    await set_commands(bot)
     await bot.send_message(ADMIN_ID, "Бот запущен.")
 
 
@@ -38,12 +41,14 @@ async def start():
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 
+    dp.callback_query.register(register_new_player, F.data == 'new_player')
+    dp.callback_query.register(done_registering_players, F.data == 'all_players_are_registered')
     dp.message.register(get_start, Command(commands=["start"]))
-    dp.message.register(get_true_contact, F.content_type.CONTACT, IsTrueContact())
-    dp.message.register(get_fake_contact, F.content_type.CONTACT)
+    dp.message.register(get_true_contact, F.content_type == 'contact', IsTrueContact())
+    dp.message.register(get_fake_contact, F.content_type == 'contact')
 
     try:
-        # await bot.delete_webhook(drop_pending_updates=True)
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
     finally:
         await bot.session.close()

@@ -4,7 +4,7 @@ from aiogram import Bot
 from aiogram.types import Message
 
 from core.utils.dbconnect import Request
-from core.keyboards.reply import first_reg_keyboard
+from core.keyboards.inline import first_reg_keyboard
 
 
 async def get_start(message: Message, request: Request):
@@ -19,5 +19,5 @@ async def get_start(message: Message, request: Request):
                 group_name=message.chat.title
             )
             await message.answer(f"Красавчики,че. Добавили в первый раз в группу? "
-                                 f"Значит надо зарегать всех кто будет играть.", reply_markup=first_reg_keyboard)
+                                 f"Значит надо зарегать всех кто будет играть.", reply_markup=first_reg_keyboard())
 
