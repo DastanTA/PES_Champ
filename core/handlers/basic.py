@@ -4,7 +4,7 @@ from aiogram import Bot
 from aiogram.types import Message
 
 from core.utils.dbconnect import Request
-from core.keyboards.inline import first_reg_keyboard
+from core.keyboards.inline import first_reg_keyboard, add_player_keyboard
 
 
 async def get_start(message: Message, request: Request):
@@ -21,3 +21,9 @@ async def get_start(message: Message, request: Request):
             await message.answer(f"Красавчики,че. Добавили в первый раз в группу? "
                                  f"Значит надо зарегать всех кто будет играть.", reply_markup=first_reg_keyboard())
 
+
+async def add_new_player(message: Message):
+    await message.answer(
+        f"Хорошо. Кнопку должен нажать тот, кого надо добавить.",
+        reply_markup=add_player_keyboard()
+    )
