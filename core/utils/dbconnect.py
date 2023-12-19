@@ -16,6 +16,10 @@ class Request:
             return True
         return False
 
+    async def all_users(self, group_chat_id):
+        query = f"SELECT * FROM users WHERE group_chat_id={group_chat_id}"
+        return await self.connector.fetch(query)
+
     async def add_group(self, group_chat_id, group_name):
         query = f"INSERT INTO groups (group_chat_id, date_created, group_name) VALUES ({group_chat_id}, CURRENT_DATE, '{group_name}') ON CONFLICT (group_chat_id) DO UPDATE SET group_name='{group_name}'"
         await self.connector.execute(query)

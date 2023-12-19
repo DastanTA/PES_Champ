@@ -16,10 +16,14 @@ async def register_new_player(call: CallbackQuery, request: Request):
     await call.answer()
 
 
-async def done_registering_players(call: CallbackQuery, bot: Bot):
-    await call.message.answer(f"Отлично зарегистрировали всех. Но если кого-то забыли добавить, "
-                              f"можете воспользоваться командой /add_player.\nЧтобы зарегать чемпиона "
-                              f"выберите команду /start еще раз.")
+async def done_registering_players(call: CallbackQuery, bot: Bot, request: Request):
+    all_users = await request.all_users(call.message.chat.id)
+    answer_str = (f"Отлично зарегистрировали всех. Но если кого-то забыли добавить, "
+                  f"можете воспользоваться командой /add_player.\nЧтобы зарегать "
+                  f"чемпиона выберите команду /start еще раз. Кого зарегистрировали:")
+    for user in all_users:
+        answer_str += f"\n<b>{user['first_name']}</b>"
+    await call.message.answer(answer_str)
     await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                         message_id=call.message.message_id, reply_markup=None)
     await call.answer()
