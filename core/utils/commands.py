@@ -14,7 +14,7 @@ async def set_commands(bot: Bot):
             command='history', description='выводит историю чемпионатов'
         ),
         BotCommand(
-            command='stats', description='показывает кто сколько раз становился чемпионом'
+            command='all_stats', description='показывает кто сколько раз становился чемпионом'
         ),
         BotCommand(
             command='cancel', description='останавливает процесс записи итогов чемпионата'

@@ -9,6 +9,10 @@ class Request:
         query = f"INSERT INTO users (first_name, user_id, group_chat_id) VALUES ('{first_name}', {user_id}, {group_chat_id}) ON CONFLICT (user_id) DO UPDATE SET first_name='{first_name}'"
         await self.connector.execute(query)
 
+    async def get_user(self, user_id):
+        query = f"SELECT * FROM users WHERE user_id={user_id}"
+        return await self.connector.fetch(query)
+
     async def check_user(self, user_id):
         query = f"SELECT * FROM users WHERE user_id={user_id}"
         found_user = await self.connector.fetch(query)
@@ -30,3 +34,23 @@ class Request:
         if found_group:
             return True
         return False
+
+    async def add_champion(self, group_chat_id, winner_id):
+        query = f"INSERT INTO champ_results (group_chat_id, winner_id, date_created) VALUES ({group_chat_id}, {winner_id}, CURRENT_DATE)"
+        await self.connector.execute(query)
+
+    async def get_all_stats(self, group_chat_id):
+        query = f"SELECT * FROM champ_results WHERE group_chat_id = '{group_chat_id}'"
+        all_records = await self.connector.fetch(query)
+        all_stats = {}
+        for record in all_records:
+            if record["winner_id"] not in all_stats:
+                all_stats[record["winner_id"]] = 1
+            else:
+                all_stats[record["winner_id"]] += 1
+
+        sorted_stats_list = sorted(all_stats.items(), key=lambda x: x[1], reverse=True)
+        sorted_stats = dict(sorted_stats_list)
+
+        return sorted_stats
+

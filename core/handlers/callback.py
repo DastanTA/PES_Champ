@@ -1,5 +1,6 @@
+from datetime import datetime
+
 from aiogram import Bot
-from aiogram.enums import ParseMode
 from aiogram.types import CallbackQuery
 
 from core.utils.dbconnect import Request
@@ -39,4 +40,18 @@ async def add_new_player_inline(call: CallbackQuery, request: Request, bot: Bot)
     else:
         await call.answer(f"Игрок {call.from_user.first_name} уже есть в базе.", show_alert=True)
 
+    await call.answer()
+
+
+async def remove_record_inline(call: CallbackQuery, request: Request, bot: Bot):
+    pass
+
+
+async def add_champ_result(call: CallbackQuery, request: Request, bot: Bot):
+    user_id = int(call.data.split("_")[1])
+    winner = await request.get_user(user_id)
+    await request.add_champion(call.message.chat.id, winner[0]["user_id"])
+    await call.message.answer(f"Сегодня[{datetime.now().date().strftime('%d.%m.%Y')}] чемпион: {winner[0]['first_name']}")
+    await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
+                                        message_id=call.message.message_id, reply_markup=None)
     await call.answer()
