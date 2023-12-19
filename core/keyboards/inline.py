@@ -11,5 +11,5 @@ def first_reg_keyboard():
 
 def add_player_keyboard():
     inline_keyboard = InlineKeyboardBuilder()
-    inline_keyboard.button(text="Добавить меня", callback_data="add_player")
+    inline_keyboard.button(text="Добавить меня", callback_data="add_new_player")
     return inline_keyboard.as_markup()

@@ -10,7 +10,7 @@ from config import BOT_TOKEN, ADMIN_ID, PGPORT, PGUSER, PGPASSWORD, HOST, DATABA
 from core.filters.iscontact import IsTrueContact
 from core.handlers.basic import get_start, add_new_player
 from core.handlers.contact import get_fake_contact, get_true_contact
-from core.handlers.callback import register_new_player, done_registering_players, add_new_player
+from core.handlers.callback import register_new_player, done_registering_players, add_new_player_inline
 from core.middlewares.dbmiddleware import DbSession
 from core.utils.commands import set_commands
 
@@ -43,7 +43,7 @@ async def start():
 
     dp.callback_query.register(register_new_player, F.data == 'new_player')
     dp.callback_query.register(done_registering_players, F.data == 'all_players_are_registered')
-    dp.callback_query.register(add_new_player, F.data == 'add_player')
+    dp.callback_query.register(add_new_player_inline, F.data == 'add_new_player')
     dp.message.register(get_start, Command(commands=["start"]))
     dp.message.register(add_new_player, Command(commands=["add_player"]))
     dp.message.register(get_true_contact, F.content_type == 'contact', IsTrueContact())
