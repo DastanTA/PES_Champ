@@ -7,7 +7,7 @@ from aiogram import F
 from aiogram.filters import Command
 
 from config import BOT_TOKEN, ADMIN_ID, PGPORT, PGUSER, PGPASSWORD, HOST, DATABASE
-from core.handlers.basic import get_start, add_new_player, show_all_stats
+from core.handlers.basic import get_start, add_new_player, show_all_stats, show_this_year_stats
 from core.handlers.callback import (register_new_player, done_registering_players, add_new_player_inline,
                                     add_champ_result)
 from core.middlewares.dbmiddleware import DbSession
@@ -48,6 +48,7 @@ async def start():
     dp.message.register(get_start, Command(commands=["start"]))
     dp.message.register(add_new_player, Command(commands=["add_player"]))
     dp.message.register(show_all_stats, Command(commands=["all_stats"]))
+    dp.message.register(show_this_year_stats, Command(commands=["this_year_stats"]))
 
     try:
         await bot.delete_webhook(drop_pending_updates=True)

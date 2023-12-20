@@ -11,16 +11,19 @@ async def set_commands(bot: Bot):
             command='help', description='Сюда надо написать текст'
         ),
         BotCommand(
-            command='history', description='выводит историю чемпионатов'
+            command='history', description='выгрузка в эксель всех записей'
         ),
         BotCommand(
             command='all_stats', description='показывает кто сколько раз становился чемпионом'
         ),
         BotCommand(
-            command='cancel', description='останавливает процесс записи итогов чемпионата'
+            command='this_year_stats', description='показывает кто сколько раз становился чемпионом'
         ),
         BotCommand(
             command='add_player', description='добавить нового игрока'
+        ),
+        BotCommand(
+            command='cancel', description='останавливает процесс записи итогов чемпионата'
         )
     ]
 

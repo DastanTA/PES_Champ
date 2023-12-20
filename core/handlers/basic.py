@@ -1,7 +1,5 @@
-import json
 from datetime import datetime
 
-from aiogram import Bot
 from aiogram.types import Message
 
 from core.utils.dbconnect import Request
@@ -35,11 +33,9 @@ async def add_new_player(message: Message):
     )
 
 
-async def get_all_stats_str(message: Message, request: Request):
-    all_stats = await request.get_all_stats(message.chat.id)
-    answer = f"Статистика:"
+async def get_stats_str(request: Request, query_result: dict, answer: str) -> str:
     counter = 1
-    for user_id, number in all_stats.items():
+    for user_id, number in query_result.items():
         player = await request.get_user(user_id)
         answer += f"\n{counter}. {player[0]['first_name']}: <b>{number}</b>"
         counter += 1
@@ -47,5 +43,12 @@ async def get_all_stats_str(message: Message, request: Request):
 
 
 async def show_all_stats(message: Message, request: Request):
-    answer = await get_all_stats_str(message, request)
+    all_stats = await request.get_all_stats(message.chat.id)
+    answer = await get_stats_str(request, all_stats, answer=f"Общая статистика:\n")
+    await message.answer(answer)
+
+
+async def show_this_year_stats(message: Message, request: Request):
+    this_year = await request.get_stats_current_year(message.chat.id)
+    answer = await get_stats_str(request, this_year, answer=f"Статистика текущего года:\n")
     await message.answer(answer)
