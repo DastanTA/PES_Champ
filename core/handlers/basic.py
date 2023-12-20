@@ -35,7 +35,7 @@ async def add_new_player(message: Message):
     )
 
 
-async def show_all_stats(message: Message, request: Request):
+async def get_all_stats_str(message: Message, request: Request):
     all_stats = await request.get_all_stats(message.chat.id)
     answer = f"Статистика:"
     counter = 1
@@ -43,4 +43,9 @@ async def show_all_stats(message: Message, request: Request):
         player = await request.get_user(user_id)
         answer += f"\n{counter}. {player[0]['first_name']}: <b>{number}</b>"
         counter += 1
+    return answer
+
+
+async def show_all_stats(message: Message, request: Request):
+    answer = await get_all_stats_str(message, request)
     await message.answer(answer)

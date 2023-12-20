@@ -4,6 +4,7 @@ from aiogram import Bot
 from aiogram.types import CallbackQuery
 
 from core.utils.dbconnect import Request
+from core.handlers.basic import get_all_stats_str
 
 
 async def register_new_player(call: CallbackQuery, request: Request):
@@ -52,8 +53,10 @@ async def add_champ_result(call: CallbackQuery, request: Request, bot: Bot):
     winner = await request.get_user(user_id)
     if user_id != call.from_user.id:
         await request.add_champion(call.message.chat.id, winner[0]["user_id"])
-        await call.message.answer(f"Сегодня[{datetime.now().date().strftime('%d.%m.%Y')}] "
-                                  f"чемпион: {winner[0]['first_name']}")
+        stats = await get_all_stats_str(call.message, request)
+        answer = (f"Сегодня[{datetime.now().date().strftime('%d.%m.%Y')}] "
+                  f"чемпион: <b>{winner[0]['first_name']}</b>\n\n{stats}")
+        await call.message.answer(answer)
         await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                             message_id=call.message.message_id, reply_markup=None)
     else:
