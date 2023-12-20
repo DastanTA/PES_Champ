@@ -14,10 +14,10 @@ async def set_commands(bot: Bot):
             command='history', description='выгрузка в эксель всех записей'
         ),
         BotCommand(
-            command='all_stats', description='показывает кто сколько раз становился чемпионом'
+            command='all_stats', description='показывает кто сколько раз становился чемпионом за все время'
         ),
         BotCommand(
-            command='this_year_stats', description='показывает кто сколько раз становился чемпионом'
+            command='this_year_stats', description='показывает кто сколько раз становился чемпионом в этом году'
         ),
         BotCommand(
             command='add_player', description='добавить нового игрока'

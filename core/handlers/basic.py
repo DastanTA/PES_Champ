@@ -21,7 +21,8 @@ async def get_start(message: Message, request: Request):
                                  f"Значит надо зарегать всех кто будет играть.", reply_markup=first_reg_keyboard())
         else:
             await message.answer(
-                f"Кто сегодня({datetime.now().date().strftime('%d.%m.%Y')}) чемпион?",
+                f"Кто сегодня({datetime.now().date().strftime('%d.%m.%Y')}) чемпион?"
+                f"\nКроме самого чемпиона, минимум двое должны проголосовать за него.",
                 reply_markup=await all_players_keyboard(request, message.chat.id)
             )
 
