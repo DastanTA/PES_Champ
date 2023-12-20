@@ -50,8 +50,12 @@ async def remove_record_inline(call: CallbackQuery, request: Request, bot: Bot):
 async def add_champ_result(call: CallbackQuery, request: Request, bot: Bot):
     user_id = int(call.data.split("_")[1])
     winner = await request.get_user(user_id)
-    await request.add_champion(call.message.chat.id, winner[0]["user_id"])
-    await call.message.answer(f"Сегодня[{datetime.now().date().strftime('%d.%m.%Y')}] чемпион: {winner[0]['first_name']}")
-    await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
-                                        message_id=call.message.message_id, reply_markup=None)
+    if user_id != call.from_user.id:
+        await request.add_champion(call.message.chat.id, winner[0]["user_id"])
+        await call.message.answer(f"Сегодня[{datetime.now().date().strftime('%d.%m.%Y')}] "
+                                  f"чемпион: {winner[0]['first_name']}")
+        await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
+                                            message_id=call.message.message_id, reply_markup=None)
+    else:
+        await call.answer(f"{winner[0]['first_name']}, вы не можете голосовать за себя")
     await call.answer()
