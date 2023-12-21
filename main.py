@@ -9,7 +9,7 @@ from aiogram.filters import Command
 from config import BOT_TOKEN, ADMIN_ID, PGPORT, PGUSER, PGPASSWORD, HOST, DATABASE
 from core.handlers.basic import get_start, add_new_player, show_all_stats, show_this_year_stats
 from core.handlers.callback import (register_new_player, done_registering_players, add_new_player_inline,
-                                    add_champ_result)
+                                    add_champ_result, cancel_champ_process)
 from core.middlewares.dbmiddleware import DbSession
 from core.utils.commands import set_commands
 
@@ -44,6 +44,7 @@ async def start():
     dp.callback_query.register(done_registering_players, F.data == 'all_players_are_registered')
     dp.callback_query.register(add_new_player_inline, F.data == 'add_new_player')
     dp.callback_query.register(add_champ_result, F.data.startswith('champ_'))
+    dp.callback_query.register(cancel_champ_process, F.data.startswith('cancel_record_process'))
 
     dp.message.register(get_start, Command(commands=["start"]))
     dp.message.register(add_new_player, Command(commands=["add_player"]))

@@ -83,3 +83,11 @@ async def add_champ_result(call: CallbackQuery, request: Request, bot: Bot):
             continue
 
     await call.answer()
+
+
+async def cancel_champ_process(call: CallbackQuery, bot: Bot):
+    global votes
+    votes = {}
+    await call.message.answer("Процесс регистрации чемпиона отменен. Нажмите на /start, если хотите начать заново.")
+    await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
+                                        message_id=call.message.message_id, reply_markup=None)
