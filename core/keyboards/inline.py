@@ -25,4 +25,5 @@ async def all_players_keyboard(request: Request, chat_id: int):
     for player in all_players:
         inline_keyboard.button(text=f"{player['first_name']}", callback_data=f"champ_{player['user_id']}")
     inline_keyboard.button(text=f"отмена", callback_data=f"cancel_record_process")
+    inline_keyboard.adjust(4)
     return inline_keyboard.as_markup()
