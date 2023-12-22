@@ -8,13 +8,13 @@ async def set_commands(bot: Bot):
             command='start', description='Начало процесса записи чемпиона.'
         ),
         BotCommand(
-            command='help', description='Сюда надо написать текст'
-        ),
-        BotCommand(
-            command='history', description='выгрузка в эксель всех записей'
+            command='help', description='инструкции'
         ),
         BotCommand(
             command='all_stats', description='показывает кто сколько раз становился чемпионом за все время'
+        ),
+        BotCommand(
+            command='all_stats_in_cups', description='показывает кто сколько раз становился чемпионом за все время'
         ),
         BotCommand(
             command='this_year_stats', description='показывает кто сколько раз становился чемпионом в этом году'
@@ -23,7 +23,7 @@ async def set_commands(bot: Bot):
             command='add_player', description='добавить нового игрока'
         ),
         BotCommand(
-            command='cancel', description='останавливает процесс записи итогов чемпионата'
+            command='cancel', description='удаляет последнюю запись'
         )
     ]
 
@@ -32,7 +32,7 @@ async def set_commands(bot: Bot):
             command='start', description='Начало.'
         ),
         BotCommand(
-            command='help', description='Сюда надо написать текст'
+            command='help', description='инструкция'
         )
     ]
 

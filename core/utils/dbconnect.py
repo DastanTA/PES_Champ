@@ -21,16 +21,18 @@ class Request:
         return sorted_stats
 
     async def add_user(self, user_id, first_name, group_chat_id):
-        query = f"INSERT INTO users (first_name, user_id, group_chat_id) VALUES ('{first_name}', {user_id}, {group_chat_id}) ON CONFLICT (user_id) DO UPDATE SET first_name='{first_name}'"
+        query = f"INSERT INTO users (first_name, user_id, group_chat_id) VALUES ('{first_name}', {user_id}, {group_chat_id})"
         await self.connector.execute(query)
 
     async def get_user(self, user_id):
         query = f"SELECT * FROM users WHERE user_id={user_id}"
         return await self.connector.fetch(query)
 
-    async def check_user(self, user_id):
-        query = f"SELECT * FROM users WHERE user_id={user_id}"
+    async def check_user(self, user_id, group_chat_id, first_name):
+        query = f"SELECT * FROM users WHERE user_id={user_id} AND group_chat_id={group_chat_id}"
         found_user = await self.connector.fetch(query)
+        query2 = f"UPDATE users SET first_name='{first_name}' WHERE user_id = '{user_id}' AND first_name <> '{first_name}'"
+        await self.connector.execute(query2)
         if found_user:
             return True
         return False
@@ -40,12 +42,14 @@ class Request:
         return await self.connector.fetch(query)
 
     async def add_group(self, group_chat_id, group_name):
-        query = f"INSERT INTO groups (group_chat_id, date_created, group_name) VALUES ({group_chat_id}, CURRENT_DATE, '{group_name}') ON CONFLICT (group_chat_id) DO UPDATE SET group_name='{group_name}'"
+        query = f"INSERT INTO groups (group_chat_id, date_created, group_name) VALUES ({group_chat_id}, CURRENT_DATE, '{group_name}')"
         await self.connector.execute(query)
 
-    async def check_group(self, group_chat_id):
+    async def check_group(self, group_chat_id, group_name):
         query = f"SELECT * FROM groups WHERE group_chat_id = '{group_chat_id}'"
         found_group = await self.connector.fetch(query)
+        query2 = f"UPDATE groups SET group_name='{group_name}' WHERE group_chat_id = '{group_chat_id}' AND group_name <> '{group_name}'"
+        await self.connector.execute(query2)
         if found_group:
             return True
         return False
@@ -63,3 +67,11 @@ class Request:
         query = f"SELECT * FROM champ_results WHERE EXTRACT(YEAR FROM date_created) = EXTRACT(YEAR FROM CURRENT_DATE) AND group_chat_id = '{group_chat_id}'"
         this_year_stats = await self._stats_from_db(query)
         return this_year_stats
+
+    async def delete_last_record_champ_result(self, group_chat_id):
+        query = f"DELETE FROM champ_results WHERE id = (SELECT MAX(id) FROM champ_results WHERE group_chat_id = '{group_chat_id}')"
+        await self.connector.execute(query)
+
+    async def get_any_record(self, group_chat_id):
+        query = f"SELECT * FROM champ_results WHERE group_chat_id={group_chat_id}"
+        return await self.connector.fetch(query)

@@ -27,3 +27,10 @@ async def all_players_keyboard(request: Request, chat_id: int):
     inline_keyboard.button(text=f"отмена", callback_data=f"cancel_record_process")
     inline_keyboard.adjust(4)
     return inline_keyboard.as_markup()
+
+
+def yes_no_keyboard():
+    inline_keyboard = InlineKeyboardBuilder()
+    inline_keyboard.button(text="Да", callback_data="delete_yes")
+    inline_keyboard.button(text="Нет", callback_data="delete_no")
+    return inline_keyboard.as_markup()

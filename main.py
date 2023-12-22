@@ -7,9 +7,10 @@ from aiogram import F
 from aiogram.filters import Command
 
 from config import BOT_TOKEN, ADMIN_ID, PGPORT, PGUSER, PGPASSWORD, HOST, DATABASE
-from core.handlers.basic import get_start, add_new_player, show_all_stats, show_this_year_stats
+from core.handlers.basic import (get_start, add_new_player, show_all_stats, show_this_year_stats, cancel_last_record,
+                                 show_all_stats_in_cups)
 from core.handlers.callback import (register_new_player, done_registering_players, add_new_player_inline,
-                                    add_champ_result, cancel_champ_process)
+                                    add_champ_result, cancel_champ_process, delete_last_record)
 from core.middlewares.dbmiddleware import DbSession
 from core.utils.commands import set_commands
 
@@ -44,12 +45,15 @@ async def start():
     dp.callback_query.register(done_registering_players, F.data == 'all_players_are_registered')
     dp.callback_query.register(add_new_player_inline, F.data == 'add_new_player')
     dp.callback_query.register(add_champ_result, F.data.startswith('champ_'))
-    dp.callback_query.register(cancel_champ_process, F.data.startswith('cancel_record_process'))
+    dp.callback_query.register(cancel_champ_process, F.data == 'cancel_record_process')
+    dp.callback_query.register(delete_last_record, F.data.startswith('delete_'))
 
     dp.message.register(get_start, Command(commands=["start"]))
     dp.message.register(add_new_player, Command(commands=["add_player"]))
     dp.message.register(show_all_stats, Command(commands=["all_stats"]))
+    dp.message.register(show_all_stats_in_cups, Command(commands=["all_stats_in_cups"]))
     dp.message.register(show_this_year_stats, Command(commands=["this_year_stats"]))
+    dp.message.register(cancel_last_record, Command(commands=["cancel"]))
 
     try:
         await bot.delete_webhook(drop_pending_updates=True)
