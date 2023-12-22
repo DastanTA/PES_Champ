@@ -5,7 +5,7 @@ from aiogram import Bot
 from aiogram.types import CallbackQuery
 
 from core.utils.dbconnect import Request
-from core.handlers.basic import get_stats_str
+from core.handlers.basic import _get_stats_str
 from core.handlers import basic
 
 
@@ -68,7 +68,7 @@ async def add_champ_result(call: CallbackQuery, request: Request, bot: Bot):
         if counted_votes[value] >= 2:
             await request.add_champion(call.message.chat.id, winner[0]["user_id"])
             this_year = await request.get_stats_current_year(call.message.chat.id)
-            stats = await get_stats_str(request, this_year, answer=f"Статистика текущего года:\n")
+            stats = await _get_stats_str(request, this_year, answer=f"Статистика текущего года:\n")
             answer = (f"Сегодня[{datetime.now().date().strftime('%d.%m.%Y')}] "
                       f"чемпион: <b>{winner[0]['first_name']}</b>\n\n{stats}")
             await call.message.answer(answer)
@@ -96,7 +96,7 @@ async def delete_last_record(call: CallbackQuery, request: Request, bot: Bot):
     elif call.data == "delete_yes":
         await request.delete_last_record_champ_result(call.message.chat.id)
         all_stats = await request.get_all_stats(call.message.chat.id)
-        stats = await get_stats_str(request, all_stats, answer=f"Статистика за все время:\n")
+        stats = await _get_stats_str(request, all_stats, answer=f"Статистика за все время:\n")
         answer = f"Последняя запись с базы удалена.\n\n{stats}"
         await call.message.answer(answer)
         await bot.edit_message_reply_markup(chat_id=call.message.chat.id,

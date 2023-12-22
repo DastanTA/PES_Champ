@@ -8,7 +8,7 @@ from aiogram.filters import Command
 
 from config import BOT_TOKEN, ADMIN_ID, PGPORT, PGUSER, PGPASSWORD, HOST, DATABASE
 from core.handlers.basic import (get_start, add_new_player, show_all_stats, show_this_year_stats, cancel_last_record,
-                                 show_all_stats_in_cups)
+                                 show_all_stats_in_cups, show_all_players, get_help)
 from core.handlers.callback import (register_new_player, done_registering_players, add_new_player_inline,
                                     add_champ_result, cancel_champ_process, delete_last_record)
 from core.middlewares.dbmiddleware import DbSession
@@ -50,10 +50,12 @@ async def start():
 
     dp.message.register(get_start, Command(commands=["start"]))
     dp.message.register(add_new_player, Command(commands=["add_player"]))
+    dp.message.register(show_all_players, Command(commands=["all_players"]))
     dp.message.register(show_all_stats, Command(commands=["all_stats"]))
     dp.message.register(show_all_stats_in_cups, Command(commands=["all_stats_in_cups"]))
     dp.message.register(show_this_year_stats, Command(commands=["this_year_stats"]))
     dp.message.register(cancel_last_record, Command(commands=["cancel"]))
+    dp.message.register(get_help, Command(commands=["help"]))
 
     try:
         await bot.delete_webhook(drop_pending_updates=True)

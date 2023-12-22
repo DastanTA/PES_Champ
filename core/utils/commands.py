@@ -8,9 +8,6 @@ async def set_commands(bot: Bot):
             command='start', description='Начало процесса записи чемпиона.'
         ),
         BotCommand(
-            command='help', description='инструкции'
-        ),
-        BotCommand(
             command='all_stats', description='показывает кто сколько раз становился чемпионом за все время'
         ),
         BotCommand(
@@ -23,7 +20,13 @@ async def set_commands(bot: Bot):
             command='add_player', description='добавить нового игрока'
         ),
         BotCommand(
+            command='all_players', description='Список зареганных игроков'
+        ),
+        BotCommand(
             command='cancel', description='удаляет последнюю запись'
+        ),
+        BotCommand(
+            command='help', description='инструкции'
         )
     ]
 
