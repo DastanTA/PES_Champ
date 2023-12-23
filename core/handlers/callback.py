@@ -26,7 +26,7 @@ async def done_registering_players(call: CallbackQuery, bot: Bot, request: Reque
                   f"можете воспользоваться командой /add_player.\nЧтобы зарегать "
                   f"чемпиона выберите команду /start еще раз. Кого зарегистрировали:")
     for user in all_users:
-        answer_str += f"\n<b>{user['first_name']}</b>"
+        answer_str += f"\n<b>{user['first_name']}</b>)"
     await call.message.answer(answer_str)
     await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                         message_id=call.message.message_id, reply_markup=None)
@@ -36,8 +36,11 @@ async def done_registering_players(call: CallbackQuery, bot: Bot, request: Reque
 async def add_new_player_inline(call: CallbackQuery, request: Request, bot: Bot):
     if not await request.check_user(call.from_user.id, call.message.chat.id, call.from_user.first_name):
         new_player = call.from_user.first_name
+        username = None
+        if call.from_user.username:
+            username = call.from_user.username
         await request.add_user(user_id=call.from_user.id, first_name=new_player, group_chat_id=call.message.chat.id)
-        await call.message.answer(f"Новый игрок <b>{new_player}</b> зарегистрирован.")
+        await call.message.answer(f"Новый игрок <b>{new_player}</b>({username}) зарегистрирован.")
         await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                             message_id=call.message.message_id, reply_markup=None)
     else:
@@ -84,7 +87,7 @@ async def add_champ_result(call: CallbackQuery, request: Request, bot: Bot):
 
 async def cancel_champ_process(call: CallbackQuery, bot: Bot):
     basic.votes[call.message.chat.id] = {}
-    await call.message.answer("Процесс регистрации чемпиона отменен. Нажмите на /start, если хотите начать заново.")
+    await call.message.answer("Процесс регистрации чемпиона отменен. Нажмите на /add_result, если хотите начать заново.")
     await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                         message_id=call.message.message_id, reply_markup=None)
 

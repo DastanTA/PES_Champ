@@ -3,7 +3,7 @@ from datetime import datetime
 from aiogram.types import Message
 
 from core.utils.dbconnect import Request
-from core.keyboards.inline import first_reg_keyboard, add_player_keyboard, all_players_keyboard, yes_no_keyboard
+from core.keyboards.inline import first_reg_keyboard, add_player_keyboard, all_players_keyboard, yes_no_keyboard, start_keyboard
 
 
 votes = dict()
@@ -53,6 +53,7 @@ group_instructions = ("Данный бот принимает информаци
 
 
 async def get_start(message: Message, request: Request):
+    print(message.model_dump_json())
     if message.chat.type == 'private':
         await message.answer(f"Салам, {message.from_user.first_name}!"
                              f"\nЧтобы начать пользоваться ботом, надо его сначала в группу добавить")
@@ -66,12 +67,16 @@ async def get_start(message: Message, request: Request):
             await message.answer(f"Красавчики,че. Добавили в первый раз в группу? "
                                  f"Значит надо зарегать всех кто будет играть.", reply_markup=first_reg_keyboard())
         else:
-            votes[message.chat.id] = {}
-            await message.answer(
-                f"Кто сегодня({datetime.now().date().strftime('%d.%m.%Y')}) чемпион?"
-                f"\nКроме самого чемпиона, минимум двое должны проголосовать за него.",
-                reply_markup=await all_players_keyboard(request, message.chat.id)
-            )
+            await message.answer("выберите команду.", reply_markup=start_keyboard())
+
+
+async def add_result_command(message: Message, request: Request):
+    votes[message.chat.id] = {}
+    await message.answer(
+        f"Кто сегодня({datetime.now().date().strftime('%d.%m.%Y')}) чемпион?"
+        f"\nКроме самого чемпиона, минимум двое должны проголосовать за него.",
+        reply_markup=await all_players_keyboard(request, message.chat.id)
+    )
 
 
 async def add_new_player(message: Message):

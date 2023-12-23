@@ -5,7 +5,9 @@ from aiogram.types import BotCommand, BotCommandScopeAllGroupChats, BotCommandSc
 async def set_commands(bot: Bot):
     group_commands = [
         BotCommand(
-            command='start', description='Начало процесса записи чемпиона.'
+            command='start', description='Старт. Рег или команды.'
+        ),BotCommand(
+            command='add_result', description='Начало процесса записи чемпиона.'
         ),
         BotCommand(
             command='all_stats', description='показывает кто сколько раз становился чемпионом за все время'

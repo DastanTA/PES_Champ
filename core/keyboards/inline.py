@@ -1,5 +1,4 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.types import Message
 
 from core.utils.dbconnect import Request
 
@@ -33,4 +32,17 @@ def yes_no_keyboard():
     inline_keyboard = InlineKeyboardBuilder()
     inline_keyboard.button(text="Да", callback_data="delete_yes")
     inline_keyboard.button(text="Нет", callback_data="delete_no")
+    return inline_keyboard.as_markup()
+
+
+def start_keyboard():
+    inline_keyboard = InlineKeyboardBuilder()
+    inline_keyboard.button(text="добавить чемпа", callback_data="add_champ")
+    inline_keyboard.button(text="за всю историю", callback_data="all_stats")
+    inline_keyboard.button(text="🏆", callback_data="all_stats_in_cups")
+    inline_keyboard.button(text="за этот год", callback_data="this_year_stats")
+    inline_keyboard.button(text="добавить игрока", callback_data="add_player_button")
+    inline_keyboard.button(text="список игроков", callback_data="all_players_button")
+    inline_keyboard.button(text="help", callback_data="help_instructions")
+    inline_keyboard.adjust(2)
     return inline_keyboard.as_markup()
