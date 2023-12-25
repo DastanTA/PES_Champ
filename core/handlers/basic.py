@@ -53,7 +53,6 @@ group_instructions = ("Данный бот принимает информаци
 
 
 async def get_start(message: Message, request: Request):
-    print(message.model_dump_json())
     if message.chat.type == 'private':
         await message.answer(f"Салам, {message.from_user.first_name}!"
                              f"\nЧтобы начать пользоваться ботом, надо его сначала в группу добавить")
